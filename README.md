@@ -1,7 +1,7 @@
 
 # Threadsafe
 
-A Go package providing thread-safe implementations of arrays, slices, and maps using generics and type constraints.
+A Go package providing thread-safe implementations of arrays, slices, maps, stack & queue using generics and type constraints.
 
 ## Installation
 
@@ -13,7 +13,7 @@ go get github.com/hayageek/threadsafe
 
 ## Usage
 
-This package provides thread-safe implementations for arrays, slices, and maps. Below are usage examples and API lists for each of these data types.
+This package provides thread-safe implementations for arrays, slices, maps, stack & queue. Below are usage examples and API lists for each of these data types.
 
 ### Thread-Safe Array
 
