@@ -165,3 +165,87 @@ func main() {
     fmt.Println("Values:", values)
 }
 ```
+
+
+### Thread-Safe Stack
+
+A thread-safe stack for safely adding and removing items.
+
+### Methods
+
+- `NewStack() *Stack`: Creates a new thread-safe stack.
+- `Push(value interface{})`: Adds an element to the stack.
+- `Pop() (interface{}, bool)`: Removes and returns an element from the stack. Returns `false` if the stack is empty.
+- `Len() int`: Returns the number of elements in the stack.
+
+### Example
+
+```go
+package main
+
+import (
+    "fmt"
+    "github.com/hayageek/threadsafe"
+)
+
+func main() {
+    stack := threadsafe.NewStack()
+
+    stack.Push(10)
+    stack.Push(20)
+    stack.Push(30)
+
+    fmt.Println("Stack length:", stack.Len())
+
+    value, ok := stack.Pop()
+    if ok {
+        fmt.Println("Popped value:", value)
+    } else {
+        fmt.Println("Stack is empty")
+    }
+
+    fmt.Println("Stack length after pop:", stack.Len())
+}
+```
+
+
+### Thread-Safe Queue
+
+A thread-safe queue for safely adding and removing items.
+
+#### Methods
+
+- `NewQueue() *Queue`: Creates a new thread-safe queue.
+- `Enqueue(value interface{})`: Adds an element to the queue.
+- `Dequeue() (interface{}, bool)`: Removes and returns an element from the queue. Returns `false` if the queue is empty.
+- `Len() int`: Returns the number of elements in the queue.
+
+#### Queue Example
+
+```go
+package main
+
+import (
+    "fmt"
+    "github.com/hayageek/threadsafe"
+)
+
+func main() {
+    queue := threadsafe.NewQueue()
+
+    queue.Enqueue(10)
+    queue.Enqueue(20)
+    queue.Enqueue(30)
+
+    fmt.Println("Queue length:", queue.Len())
+
+    value, ok := queue.Dequeue()
+    if ok {
+        fmt.Println("Dequeued value:", value)
+    } else {
+        fmt.Println("Queue is empty")
+    }
+
+    fmt.Println("Queue length after dequeue:", queue.Len())
+}
+```
