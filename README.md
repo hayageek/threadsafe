@@ -38,7 +38,7 @@ import (
 
 func main() {
     // Create a new thread-safe array with size 5
-    arr := threadsafe.NewArray(5)
+    arr := threadsafe.NewArray[int](5)
 
     // Set values in the array
     for i := 0; i < arr.Length(); i++ {
