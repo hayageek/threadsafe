@@ -60,6 +60,18 @@ func (a *Array[T]) Length() int {
 	return len(a.data)
 }
 
+// Values returns a slice of all elements in the array.
+// Example:
+//
+//	values := arr.Values()
+func (a *Array[T]) Values() []T {
+	a.mu.RLock()
+	defer a.mu.RUnlock()
+	dataCopy := make([]T, len(a.data))
+	copy(dataCopy, a.data)
+	return dataCopy
+}
+
 // Append appends a value to the array.
 // Example:
 //

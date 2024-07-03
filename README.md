@@ -30,6 +30,7 @@ A thread-safe array with a fixed size.
 - `(*Array[T]) Clear()` - Clears all elements from the array.
 - `(*Array[T]) Insert(index int, value T) bool` - Inserts a value at the specified index.
 - `(*Array[T]) Copy() *Array[T]` - Returns a copy of the array.
+- `(*Array[T]) Values() []T` - Returns a slice of all elements in the array.
 - `(*Array[T]) Length() int` - Returns the length of the array.
 
 #### Example
