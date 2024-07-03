@@ -111,3 +111,23 @@ func TestArrayCopy(t *testing.T) {
 		assert.Equal(t, origValue, copyValue)
 	}
 }
+func TestArrayValues(t *testing.T) {
+	arr := NewArray[int](10)
+
+	// Set values in the array
+	for i := 0; i < arr.Length(); i++ {
+		arr.Set(i, i*10)
+	}
+
+	// Get all values from the array
+	values := arr.Values()
+
+	// Check the length of the values slice
+	assert.Equal(t, arr.Length(), len(values))
+
+	// Check each value
+	for i, v := range values {
+		expectedValue, _ := arr.Get(i)
+		assert.Equal(t, expectedValue, v)
+	}
+}
