@@ -88,3 +88,38 @@ func (m *Map[K, V]) Values() []V {
 	}
 	return values
 }
+
+// Contains checks if the map contains the specified key.
+// Example:
+//
+//	contains := m.Contains("key")
+func (m *Map[K, V]) Contains(key K) bool {
+	m.mu.RLock()
+	defer m.mu.RUnlock()
+	_, exists := m.data[key]
+	return exists
+}
+
+// Clear removes all key-value pairs from the map.
+// Example:
+//
+//	m.Clear()
+func (m *Map[K, V]) Clear() {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	m.data = make(map[K]V)
+}
+
+// Copy returns a new thread-safe map that is a copy of the current map.
+// Example:
+//
+//	copyMap := m.Copy()
+func (m *Map[K, V]) Copy() *Map[K, V] {
+	m.mu.RLock()
+	defer m.mu.RUnlock()
+	dataCopy := make(map[K]V, len(m.data))
+	for key, value := range m.data {
+		dataCopy[key] = value
+	}
+	return &Map[K, V]{data: dataCopy}
+}

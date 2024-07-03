@@ -2,62 +2,86 @@ package threadsafe
 
 import (
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
-func TestMap(t *testing.T) {
-	// Create a new thread-safe map
+func TestNewMap(t *testing.T) {
 	m := NewMap[string, int]()
+	assert.Equal(t, 0, m.Length())
+}
 
-	// Test setting values
-	m.Set("one", 1)
-	m.Set("two", 2)
-	m.Set("three", 3)
+func TestMapSetGet(t *testing.T) {
+	m := NewMap[string, int]()
+	m.Set("key1", 42)
+	value, ok := m.Get("key1")
+	assert.True(t, ok)
+	assert.Equal(t, 42, value)
+}
 
-	// Test getting values
-	value, ok := m.Get("one")
-	if !ok || value != 1 {
-		t.Errorf("Expected 1, got %d", value)
-	}
+func TestMapGetNonExistentKey(t *testing.T) {
+	m := NewMap[string, int]()
+	value, ok := m.Get("nonexistent")
+	assert.False(t, ok)
+	assert.Equal(t, 0, value)
+}
 
-	value, ok = m.Get("two")
-	if !ok || value != 2 {
-		t.Errorf("Expected 2, got %d", value)
-	}
+func TestMapDelete(t *testing.T) {
+	m := NewMap[string, int]()
+	m.Set("key1", 42)
+	m.Delete("key1")
+	value, ok := m.Get("key1")
+	assert.False(t, ok)
+	assert.Equal(t, 0, value)
+}
 
-	// Test getting non-existent key
-	_, ok = m.Get("four")
-	if ok {
-		t.Error("Expected false for non-existent key, got true")
-	}
+func TestMapLength(t *testing.T) {
+	m := NewMap[string, int]()
+	m.Set("key1", 42)
+	m.Set("key2", 43)
+	assert.Equal(t, 2, m.Length())
+}
 
-	// Test deleting a key
-	m.Delete("two")
-	_, ok = m.Get("two")
-	if ok {
-		t.Error("Expected false for deleted key, got true")
-	}
-
-	// Test length
-	length := m.Length()
-	if length != 2 {
-		t.Errorf("Expected length 2, got %d", length)
-	}
-
-	// Test keys
+func TestMapKeys(t *testing.T) {
+	m := NewMap[string, int]()
+	m.Set("key1", 42)
+	m.Set("key2", 43)
 	keys := m.Keys()
-	expectedKeys := map[string]bool{"one": true, "three": true}
-	for _, key := range keys {
-		if !expectedKeys[key] {
-			t.Errorf("Unexpected key %s", key)
-		}
-	}
+	assert.ElementsMatch(t, []string{"key1", "key2"}, keys)
+}
 
-	// Test values
+func TestMapValues(t *testing.T) {
+	m := NewMap[string, int]()
+	m.Set("key1", 42)
+	m.Set("key2", 43)
 	values := m.Values()
-	expectedValues := map[int]bool{1: true, 3: true}
-	for _, value := range values {
-		if !expectedValues[value] {
-			t.Errorf("Unexpected value %d", value)
-		}
+	assert.ElementsMatch(t, []int{42, 43}, values)
+}
+
+func TestMapContains(t *testing.T) {
+	m := NewMap[string, int]()
+	m.Set("key1", 42)
+	assert.True(t, m.Contains("key1"))
+	assert.False(t, m.Contains("nonexistent"))
+}
+
+func TestMapClear(t *testing.T) {
+	m := NewMap[string, int]()
+	m.Set("key1", 42)
+	m.Set("key2", 43)
+	m.Clear()
+	assert.Equal(t, 0, m.Length())
+}
+
+func TestMapCopy(t *testing.T) {
+	m := NewMap[string, int]()
+	m.Set("key1", 42)
+	m.Set("key2", 43)
+	copyMap := m.Copy()
+	assert.Equal(t, m.Length(), copyMap.Length())
+	for _, key := range m.Keys() {
+		origValue, _ := m.Get(key)
+		copyValue, _ := copyMap.Get(key)
+		assert.Equal(t, origValue, copyValue)
 	}
 }
