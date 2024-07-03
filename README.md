@@ -24,6 +24,12 @@ A thread-safe array with a fixed size.
 - `NewArray(size int) *Array[T]` - Creates a new thread-safe array with the given size.
 - `(*Array[T]) Get(index int) (T, bool)` - Retrieves the value at the given index.
 - `(*Array[T]) Set(index int, value T) bool` - Sets the value at the given index.
+- `(*Array[T]) Append(value T)` - Appends a value to the array.
+- `(*Array[T]) Remove(index int) bool` - Removes the element at the given index.
+- `(*Array[T]) Contains(value T) bool` - Checks if the array contains the specified value.
+- `(*Array[T]) Clear()` - Clears all elements from the array.
+- `(*Array[T]) Insert(index int, value T) bool` - Inserts a value at the specified index.
+- `(*Array[T]) Copy() *Array[T]` - Returns a copy of the array.
 - `(*Array[T]) Length() int` - Returns the length of the array.
 
 #### Example
@@ -63,6 +69,12 @@ A dynamically-sized, thread-safe slice.
 - `(*Slice[T]) Append(value T)` - Appends a value to the slice.
 - `(*Slice[T]) Get(index int) (T, bool)` - Retrieves the value at the given index.
 - `(*Slice[T]) Set(index int, value T) bool` - Sets the value at the given index.
+- `(*Slice[T]) Remove(index int) bool` - Removes the element at the given index.
+- `(*Slice[T]) Contains(value T) bool` - Checks if the slice contains the specified value.
+- `(*Slice[T]) Clear()` - Clears all elements from the slice.
+- `(*Slice[T]) Insert(index int, value T) bool` - Inserts a value at the specified index.
+- `(*Slice[T]) Copy() *Slice[T]` - Returns a copy of the slice.
+- `(*Slice[T]) Values() []T` - Returns a slice of all values present in the slice.
 - `(*Slice[T]) Length() int` - Returns the length of the slice.
 
 #### Example
@@ -113,6 +125,9 @@ A thread-safe map for storing key-value pairs.
 - `(*Map[K, V]) Get(key K) (V, bool)` - Retrieves the value associated with the key.
 - `(*Map[K, V]) Set(key K, value V)` - Sets the value for the given key.
 - `(*Map[K, V]) Delete(key K)` - Deletes the value associated with the key.
+- `(*Map[K, V]) Contains(key K) bool` - Checks if the map contains the specified key.
+- `(*Map[K, V]) Clear()` - Clears all key-value pairs from the map.
+- `(*Map[K, V]) Copy() *Map[K, V]` - Returns a copy of the map.
 - `(*Map[K, V]) Length() int` - Returns the number of key-value pairs in the map.
 - `(*Map[K, V]) Keys() []K` - Returns a slice of all keys present in the map.
 - `(*Map[K, V]) Values() []V` - Returns a slice of all values present in the map.
@@ -171,14 +186,18 @@ func main() {
 
 A thread-safe stack for safely adding and removing items.
 
-### Methods
+#### APIs
 
-- `NewStack() *Stack`: Creates a new thread-safe stack.
-- `Push(value interface{})`: Adds an element to the stack.
-- `Pop() (interface{}, bool)`: Removes and returns an element from the stack. Returns `false` if the stack is empty.
-- `Len() int`: Returns the number of elements in the stack.
+- `NewStack() *Stack` - Creates a new thread-safe stack.
+- `(*Stack) Push(value interface{})` - Adds an element to the stack.
+- `(*Stack) Pop() (interface{}, bool)` - Removes and returns an element from the stack. Returns `false` if the stack is empty.
+- `(*Stack) Peek() (interface{}, bool)` - Returns the element at the top of the stack without removing it.
+- `(*Stack) IsEmpty() bool` - Checks if the stack is empty.
+- `(*Stack) Clear()` - Clears all elements from the stack.
+- `(*Stack) Values() []interface{}` - Returns a slice of all elements in the stack.
+- `(*Stack) Len() int` - Returns the number of elements in the stack.
 
-### Example
+#### Example
 
 ```go
 package main
@@ -213,12 +232,16 @@ func main() {
 
 A thread-safe queue for safely adding and removing items.
 
-#### Methods
+#### APIs
 
-- `NewQueue() *Queue`: Creates a new thread-safe queue.
-- `Enqueue(value interface{})`: Adds an element to the queue.
-- `Dequeue() (interface{}, bool)`: Removes and returns an element from the queue. Returns `false` if the queue is empty.
-- `Len() int`: Returns the number of elements in the queue.
+- `NewQueue() *Queue` - Creates a new thread-safe queue.
+- `(*Queue) Enqueue(value interface{})` - Adds an element to the queue.
+- `(*Queue) Dequeue() (interface{}, bool)` - Removes and returns an element from the queue. Returns `false` if the queue is empty.
+- `(*Queue) Peek() (interface{}, bool)` - Returns the element at the front of the queue without removing it.
+- `(*Queue) IsEmpty() bool` - Checks if the queue is empty.
+- `(*Queue) Clear()` - Clears all elements from the queue.
+- `(*Queue) Values() []interface{}` - Returns a slice of all elements in the queue.
+- `(*Queue) Len() int` - Returns the number of elements in the queue.
 
 #### Queue Example
 

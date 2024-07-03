@@ -2,31 +2,88 @@ package threadsafe
 
 import (
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
-func TestQueue(t *testing.T) {
-	q := NewQueue()
+func TestNewQueue(t *testing.T) {
+	queue := NewQueue()
+	assert.Equal(t, 0, queue.Len())
+}
 
-	// Test Enqueue
-	q.Enqueue(1)
-	q.Enqueue(2)
-	if q.Len() != 2 {
-		t.Errorf("Expected length 2, got %d", q.Len())
-	}
+func TestQueueEnqueue(t *testing.T) {
+	queue := NewQueue()
+	queue.Enqueue(42)
+	assert.Equal(t, 1, queue.Len())
+	value, ok := queue.Peek()
+	assert.True(t, ok)
+	assert.Equal(t, 42, value)
+}
 
-	// Test Dequeue
-	val, ok := q.Dequeue()
-	if !ok || val != 1 {
-		t.Errorf("Expected 1, got %v", val)
-	}
-	val, ok = q.Dequeue()
-	if !ok || val != 2 {
-		t.Errorf("Expected 2, got %v", val)
-	}
+func TestQueueDequeue(t *testing.T) {
+	queue := NewQueue()
+	queue.Enqueue(42)
+	value, ok := queue.Dequeue()
+	assert.True(t, ok)
+	assert.Equal(t, 42, value)
+	assert.Equal(t, 0, queue.Len())
+}
 
-	// Test Dequeue from empty queue
-	val, ok = q.Dequeue()
-	if ok || val != nil {
-		t.Errorf("Expected nil, got %v", val)
-	}
+func TestQueueDequeueEmpty(t *testing.T) {
+	queue := NewQueue()
+	value, ok := queue.Dequeue()
+	assert.False(t, ok)
+	assert.Nil(t, value)
+}
+
+func TestQueuePeek(t *testing.T) {
+	queue := NewQueue()
+	queue.Enqueue(42)
+	value, ok := queue.Peek()
+	assert.True(t, ok)
+	assert.Equal(t, 42, value)
+}
+
+func TestQueuePeekEmpty(t *testing.T) {
+	queue := NewQueue()
+	value, ok := queue.Peek()
+	assert.False(t, ok)
+	assert.Nil(t, value)
+}
+
+func TestQueueLen(t *testing.T) {
+	queue := NewQueue()
+	queue.Enqueue(42)
+	queue.Enqueue(43)
+	assert.Equal(t, 2, queue.Len())
+}
+
+func TestQueueIsEmpty(t *testing.T) {
+	queue := NewQueue()
+	assert.True(t, queue.IsEmpty())
+	queue.Enqueue(42)
+	assert.False(t, queue.IsEmpty())
+	queue.Dequeue()
+	assert.True(t, queue.IsEmpty())
+}
+
+func TestQueueClear(t *testing.T) {
+	queue := NewQueue()
+	queue.Enqueue(42)
+	queue.Enqueue(43)
+	queue.Clear()
+	assert.Equal(t, 0, queue.Len())
+	assert.True(t, queue.IsEmpty())
+}
+
+func TestQueueValues(t *testing.T) {
+	queue := NewQueue()
+	queue.Enqueue(1)
+	queue.Enqueue(2)
+	queue.Enqueue(3)
+	values := queue.Values()
+	assert.Equal(t, 3, len(values))
+	assert.Equal(t, 1, values[0])
+	assert.Equal(t, 2, values[1])
+	assert.Equal(t, 3, values[2])
 }
