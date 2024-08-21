@@ -125,6 +125,7 @@ func (a *Array[T]) Clear() {
 // Insert inserts a value at the specified index.
 // It returns a boolean indicating whether the operation was successful.
 // Example:
+//d
 //
 //	ok := arr.Insert(2, 10)
 func (a *Array[T]) Insert(index int, value T) bool {
