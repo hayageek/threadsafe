@@ -21,7 +21,7 @@ jobs:
         go-version: 1.18
 
     - name: Build
-      run: echo ${{ GITHUB_TOKEN }}
+      run: echo ${{ secrets.GITHUB_TOKEN }}
       
 
     - name: Run tests
