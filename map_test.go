@@ -85,3 +85,40 @@ func TestMapCopy(t *testing.T) {
 		assert.Equal(t, origValue, copyValue)
 	}
 }
+
+func TestMapPop(t *testing.T) {
+	m := NewMap[string, int]()
+	m.Set("key1", 42)
+	value, ok := m.Pop("key1")
+	assert.True(t, ok)
+	assert.Equal(t, 42, value)
+	_, exists := m.Get("key1")
+	assert.False(t, exists)
+}
+
+func TestMapPopNonExistent(t *testing.T) {
+	m := NewMap[string, int]()
+	value, ok := m.Pop("missing")
+	assert.False(t, ok)
+	assert.Equal(t, 0, value)
+}
+
+func TestMapGetOrSetExisting(t *testing.T) {
+	m := NewMap[string, int]()
+	m.Set("key1", 10)
+	value, loaded := m.GetOrSet("key1", 42)
+	assert.True(t, loaded)
+	assert.Equal(t, 10, value)
+	v, _ := m.Get("key1")
+	assert.Equal(t, 10, v)
+}
+
+func TestMapGetOrSetNew(t *testing.T) {
+	m := NewMap[string, int]()
+	value, loaded := m.GetOrSet("key1", 42)
+	assert.False(t, loaded)
+	assert.Equal(t, 42, value)
+	v, ok := m.Get("key1")
+	assert.True(t, ok)
+	assert.Equal(t, 42, v)
+}
