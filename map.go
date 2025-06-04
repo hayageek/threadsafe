@@ -41,6 +41,22 @@ func (m *Map[K, V]) Set(key K, value V) {
 	m.data[key] = value
 }
 
+// GetOrSet returns the existing value for the key if present. Otherwise it sets
+// defaultV for the key and returns it. The boolean return value indicates
+// whether the key was already present.
+// Example:
+//
+//	value, loaded := m.GetOrSet("key", 100)
+func (m *Map[K, V]) GetOrSet(key K, defaultV V) (V, bool) {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	if value, exists := m.data[key]; exists {
+		return value, true
+	}
+	m.data[key] = defaultV
+	return defaultV, false
+}
+
 // Delete removes the value associated with the key.
 // Example:
 //
@@ -49,6 +65,21 @@ func (m *Map[K, V]) Delete(key K) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 	delete(m.data, key)
+}
+
+// Pop removes the key from the map if it exists and returns the associated value.
+// It returns the value and a boolean indicating whether the key was found.
+// Example:
+//
+//	value, ok := m.Pop("key")
+func (m *Map[K, V]) Pop(key K) (V, bool) {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	value, exists := m.data[key]
+	if exists {
+		delete(m.data, key)
+	}
+	return value, exists
 }
 
 // Length returns the number of key-value pairs in the map.
